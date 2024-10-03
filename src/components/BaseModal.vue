@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import CloseIcon from '@/components/icons/IconCancel'
+import CloseIcon from '@/components/icons/IconCancel.vue'
 const emits = defineEmits(['closeModal'])
 defineProps<{
   showModal: boolean
