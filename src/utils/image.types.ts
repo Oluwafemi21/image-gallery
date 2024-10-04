@@ -1,7 +1,7 @@
 interface ImageInfo {
-    url: string
-    location: string
-    title: string
+  url: string
+  location: string
+  title: string
 }
 
-export { ImageInfo }
+export type { ImageInfo }
