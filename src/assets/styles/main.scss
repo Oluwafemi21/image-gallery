@@ -1,7 +1,7 @@
 @import 'base/reset';
 
-@import 'utils/mixins';
 @import 'utils/variables';
+@import 'utils/mixins';
 
 @import 'components/modal';
 
@@ -55,7 +55,8 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-auto-rows: 9px;
 
-  .photo_card_container {
+  .photo_card_container,
+  .loading_box {
     &:nth-child(1) {
       grid-row: span 8;
       order: 1;

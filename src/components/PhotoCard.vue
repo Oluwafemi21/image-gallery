@@ -1,15 +1,11 @@
 <template>
-  <div class="photo_card_container" :class="{ loading: loading }">
-    <div class="photo_card" v-if="!loading">
+  <div class="photo_card_container">
+    <div class="photo_card">
       <img :src="imageInfo.url" />
       <div class="photo_card_content">
         <p>{{ imageInfo.title }}</p>
         <span>{{ imageInfo.location }}</span>
       </div>
-    </div>
-    <div v-else class="content_loading_state">
-      <div class="loading_long"></div>
-      <div class="loading_short"></div>
     </div>
   </div>
 </template>
@@ -17,13 +13,11 @@
 <script setup lang="ts">
 import type { ImageInfo } from '@/utils/image.types'
 defineProps<{
-  loading: boolean
   imageInfo: ImageInfo
 }>()
 </script>
 
 <style scoped lang="scss">
-@import './../assets/styles/utils/mixins';
 @import './../assets/styles/utils/variables';
 
 .photo_card_container {
@@ -59,28 +53,6 @@ defineProps<{
       span {
         font-size: 14px;
         color: #8b8f91;
-      }
-    }
-  }
-
-  &.loading {
-    padding: 16px;
-    @include animate;
-
-    .content_loading_state {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      .loading_long {
-        height: 12px;
-        width: 125px;
-        margin-bottom: 8px;
-        background-color: rgba($color: #ccc, $alpha: 0.7);
-      }
-      .loading_short {
-        height: 12px;
-        width: 80px;
-        background-color: rgba($color: #ccc, $alpha: 0.7);
       }
     }
   }
