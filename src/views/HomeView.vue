@@ -85,10 +85,10 @@ watch(online, (isOnline) => {
       </div>
       <div v-else>
         <p v-if="fetchingImages && searchInput">
-          Searching for <span>"{{ searchInput }}"</span>
+          Searching for <span>"{{ searchQuery }}"</span>
         </p>
         <p v-else>
-          Search Results for <span>"{{ searchInput }}"</span>
+          Search Results for <span>"{{ searchQuery }}"</span>
         </p>
         <button @click="clearSearch">Clear search</button>
       </div>
