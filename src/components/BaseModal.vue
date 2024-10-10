@@ -4,7 +4,7 @@
       <div v-if="showModal" class="modal-container" @click="close">
         <div class="modal" @click.stop role="dialog">
           <button class="modal_close_button" @click="close" aria-label="Close modal">
-            <CloseIcon class="size-[20px] text-[#64748B]" />
+            <CloseIcon />
           </button>
           <slot name="body" />
         </div>

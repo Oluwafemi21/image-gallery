@@ -12,16 +12,15 @@
     background-color: white;
     max-height: 70vh;
     border-radius: 12px;
-    max-width: 370px;
+    max-width: 90%; // responsive for very small screens
     margin: auto;
     width: 100%;
     z-index: 10;
     display: flex;
     flex-direction: column;
-    @media (min-width: 1024px) {
+    @media (min-width: 768px) {
       max-width: 670px;
     }
-    // bg-white overflow-auto max-h-[90vh] rounded-xl max-w-sm lg:max-w-[670px] m-auto absolute w-full z-20 space-y-[21px] p-6 flex flex-col
   }
 
   .modal_close_button {
@@ -37,10 +36,15 @@
     position: absolute;
     top: -20px;
     right: -50px;
+    display: hidden;
 
     &:focus {
       outline: none;
       border: 1px solid white;
+    }
+
+    @media (min-width: 768px) {
+      display: block;
     }
   }
 }
@@ -59,7 +63,7 @@
       font-weight: 600;
       color: $primary;
       font-size: 18px;
-      line-height: 20px;
+      line-height: 1.5;
       margin-bottom: 4px;
     }
 
@@ -67,6 +71,21 @@
       color: #aeb0b5;
       font-weight: 500;
       font-size: 14px;
+    }
+  }
+
+  @include responsive(mobile) {
+    .content {
+      padding: 10px 16px;
+
+      p {
+        font-size: 14px;
+        line-height: 1;
+        margin-bottom: 2px;
+      }
+      span {
+        font-size: 10px;
+      }
     }
   }
 }

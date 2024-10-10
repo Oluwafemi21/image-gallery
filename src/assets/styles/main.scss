@@ -28,13 +28,18 @@
       outline: 2px solid $primary;
     }
 
+    svg {
+      flex-shrink: 0;
+    }
+
     input {
       background-color: transparent;
       border: none;
-      flex: 1;
       outline: none;
       font-size: $font-size-base;
       line-height: 1.5;
+      flex-grow: 1;
+      width: 100%;
 
       &::placeholder {
         color: $primary;
@@ -58,6 +63,16 @@
     text-decoration: underline;
     font-size: small;
     border: none;
+    cursor: pointer;
+  }
+
+  @include responsive(mobile) {
+    .search-box {
+      p {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+    }
   }
 }
 
@@ -71,7 +86,7 @@
   min-height: 80vh;
   display: grid;
   gap: 30px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(auto, 1fr));
   grid-auto-rows: 9px;
 
   .photo_card_container,
@@ -102,7 +117,31 @@
     }
   }
 
+  .no_results,
+  .network_error {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .network_error p {
+    margin-top: 15px;
+  }
+
   @include responsive(mobile) {
     padding-inline: 20px;
+
+    .photo_card_container:has(.photo_card),
+    .loading_box:has(.content_loading_state) {
+      grid-row: span 7;
+    }
+  }
+
+  @include responsive(tablet) {
+    padding-inline: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }

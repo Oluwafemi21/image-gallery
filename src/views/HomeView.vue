@@ -4,16 +4,18 @@ import PhotoCard from '@/components/PhotoCard.vue'
 import LoadingCard from '@/components/LoadingCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import type { UnsplashImage } from '@/utils/image.types'
-import { useDebounceFn } from '@vueuse/core'
+import { useDebounceFn, useOnline } from '@vueuse/core'
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import IconNetwork from '@/components/icons/IconNetwork.vue'
 
 const fetchingImages = ref(false)
 const isModalOpen = ref(false)
 const previewingImage = ref<UnsplashImage | null>(null)
 const searchInput = ref('')
+const searchQuery = ref('african')
 const results = ref<UnsplashImage[] | []>([])
-
+const online = useOnline()
 const closeImageModal = () => {
   isModalOpen.value = false
   previewingImage.value = null
@@ -25,6 +27,7 @@ const previewImage = (image: UnsplashImage) => {
 }
 
 const fetchImages = async (keyword: string) => {
+  if (!online) return
   fetchingImages.value = true
   const search = keyword.toLowerCase()
   await axios
@@ -39,11 +42,14 @@ const fetchImages = async (keyword: string) => {
 }
 
 onMounted(() => {
-  fetchImages('african')
+  fetchImages(searchQuery.value)
 })
 
 const debouncedFn = useDebounceFn(() => {
-  fetchImages(searchInput.value)
+  if (searchInput.value && online) {
+    searchQuery.value = searchInput.value
+    fetchImages(searchInput.value)
+  }
 }, 800)
 
 const onInputChange = () => {
@@ -52,45 +58,62 @@ const onInputChange = () => {
 
 const clearSearch = () => {
   searchInput.value = ''
-  results.value = []
-  fetchImages('african')
+  searchQuery.value = 'african'
+  fetchImages(searchQuery.value)
 }
+
+watch(online, (isOnline) => {
+  if (!isOnline) {
+    results.value = []
+  } else {
+    fetchImages(searchQuery.value)
+  }
+})
 </script>
 
 <template>
   <div class="search-box">
     <div class="search-box-container">
-      <div class="search-input" v-if="!fetchingImages">
+      <div class="search-input" v-if="searchInput !== searchQuery && !fetchingImages">
         <IconSearch />
         <input
           type="search"
           placeholder="Search for photo"
-          v-model="searchInput"
+          v-model.trim="searchInput"
           @input="onInputChange"
         />
       </div>
       <div v-else>
-        <p>
-          {{ fetchingImages ? 'Searching' : 'Search Results' }} for <span>"{{ searchInput }}"</span>
+        <p v-if="fetchingImages && searchInput">
+          Searching for <span>"{{ searchInput }}"</span>
+        </p>
+        <p v-else>
+          Search Results for <span>"{{ searchInput }}"</span>
         </p>
         <button @click="clearSearch">Clear search</button>
       </div>
     </div>
   </div>
   <section class="image-section">
-    <template v-if="fetchingImages">
-      <LoadingCard v-for="i in 6" :key="i" />
+    <template v-if="online">
+      <template v-if="fetchingImages">
+        <LoadingCard v-for="i in 6" :key="i" />
+      </template>
+      <div v-else-if="!fetchingImages && results.length < 1" class="no_results">
+        <p>No results found for "{{ searchInput }}"</p>
+      </div>
+      <PhotoCard
+        v-for="image in results"
+        :image-info="image"
+        :key="image.id"
+        v-else
+        @view-image="previewImage"
+      />
     </template>
-    <div v-else-if="!fetchingImages && results.length < 1" class="no_results">
-      <p>No results found for {{ searchInput }}</p>
+    <div v-else class="network_error">
+      <IconNetwork />
+      <p>Please check your internet connection</p>
     </div>
-    <PhotoCard
-      v-for="image in results"
-      :image-info="image"
-      :key="image.id"
-      v-else
-      @view-image="previewImage"
-    />
   </section>
 
   <BaseModal :show-modal="isModalOpen" @close-modal="closeImageModal">
