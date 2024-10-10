@@ -10,11 +10,12 @@
   background-color: $backdrop-color;
   width: 100%;
   padding: 80px 20px;
-
-  .search-input {
+  .search-box-container {
     margin: 0 auto;
     max-width: 1024px;
     width: 100%;
+  }
+  .search-input {
     background-color: white;
     border-radius: 8px;
     padding: 16px;
@@ -39,6 +40,24 @@
         color: $primary;
       }
     }
+  }
+
+  p {
+    font-size: 32px;
+    line-height: 1.5;
+    color: $primary;
+    font-weight: 700;
+
+    span {
+      color: #767d8f;
+    }
+  }
+
+  button {
+    background: transparent;
+    text-decoration: underline;
+    font-size: small;
+    border: none;
   }
 }
 

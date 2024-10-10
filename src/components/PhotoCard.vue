@@ -1,20 +1,26 @@
 <template>
-  <div class="photo_card_container">
+  <div class="photo_card_container" @click="previewImage" tabindex="0">
     <div class="photo_card">
-      <img :src="imageInfo.url" />
+      <img :src="imageInfo.urls.regular" :alt="imageInfo.alt_description" loading="lazy" />
       <div class="photo_card_content">
-        <p>{{ imageInfo.title }}</p>
-        <span>{{ imageInfo.location }}</span>
+        <p>{{ imageInfo.user.first_name }}</p>
+        <span>{{ imageInfo.user.location }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ImageInfo } from '@/utils/image.types'
-defineProps<{
-  imageInfo: ImageInfo
+import type { UnsplashImage } from '@/utils/image.types'
+const emit = defineEmits(['viewImage'])
+
+const { imageInfo } = defineProps<{
+  imageInfo: UnsplashImage
 }>()
+
+const previewImage = () => {
+  emit('viewImage', imageInfo)
+}
 </script>
 
 <style scoped lang="scss">
@@ -24,6 +30,7 @@ defineProps<{
   border-radius: 8px;
   position: relative;
   height: 100%;
+  cursor: pointer;
 
   .photo_card {
     position: relative;
@@ -36,6 +43,7 @@ defineProps<{
       height: 100%;
     }
     &_content {
+      color: white;
       position: absolute;
       padding: 16px;
       border-radius: 0 0 8px 8px;
@@ -47,14 +55,21 @@ defineProps<{
       p {
         font-weight: 500;
         font-size: $font-size-base;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
       }
 
       span {
-        font-size: 14px;
-        color: #8b8f91;
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: -1%;
       }
     }
+  }
+
+  &:hover,
+  &:focus {
+    transform: scale(1.02);
+    transition: transform 200ms ease;
   }
 }
 </style>
